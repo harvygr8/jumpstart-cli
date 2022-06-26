@@ -1,0 +1,11 @@
+~author~
+
+~classname~::~classname~()
+{
+
+}
+
+int main() {
+    std::cout << "Hello World!";
+    return 0;
+}
