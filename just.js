@@ -43,8 +43,7 @@ const prefix={
 
 }
 
-const core =['java','cpp','svelte','js','package.json'];   //if extensions are same as 'lang'
-const fromJs = ['react'] //if extensions are different than 'lang'
+const core =['java','cpp','svelte','js','package.json'];
 const proj = ['js','packagejson'];
 
 /* FOR FILES */
@@ -84,7 +83,7 @@ const createFile=async(lang,name,canStamp,prePath)=>{
   }
   //PROCESS ALL FILE TOKENS IN THE DATA VARIABLE
   if(data.includes(template_tokens.classname)){
-    data = data.replace(/~classname~/g, name);  //regex magic?
+    data = data.replace(/~classname~/g, name);
     console.log(chalk.white.bold(prefix.log + 'Found & replaced all ~classname~ tokens.'));
   }
 
@@ -144,7 +143,6 @@ const createNpmProject=async(name,packages)=>{
       packStr += `${item} `;
     });
     packStr = packStr.slice(0,-1);
-    //console.log(packStr);
     let cmds = `cd ${newDirPath} && npm i ${packStr}`;
 
     try{
@@ -172,7 +170,6 @@ cmdr
 .action((lang,name,options)=>{
   console.log("");
   console.log(chalk.white(figlet.textSync(`jumpstart v ${prgVersion}`,{font:'ANSI Shadow'})));
-  //try ternary here
   if(options.stamp){
     createFile(lang,name,true);
   }
