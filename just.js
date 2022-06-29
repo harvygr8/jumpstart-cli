@@ -8,6 +8,7 @@ const figlet = require('figlet');
 const chalk = require('chalk');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const { spawn } = require('child_process');
 
 /* Core application functionalities go here */
 const template_tokens={
@@ -33,7 +34,13 @@ const comment_types={
   react_st:'/*',
   react_end:'*/',
   svelte_st:'/*',
-  svelte_end:'*/'
+  svelte_end:'*/',
+  go_st:'/*',
+  go_end:'*/',
+  rs_st:'/*',
+  rs_end:'*/',
+  py_st:'\"\"\"',
+  py_end:'\"\"\"'
 };
 
 const prefix={
@@ -43,8 +50,8 @@ const prefix={
 
 }
 
-const core =['java','cpp','svelte','js','package.json'];
-const proj = ['js','packagejson'];
+const core =['java','cpp','svelte','js','py','go','package.json','rs','c'];
+const fromJs=['react'];
 
 /* FOR FILES */
 const createFile=async(lang,name,canStamp,prePath)=>{
@@ -55,23 +62,34 @@ const createFile=async(lang,name,canStamp,prePath)=>{
   let data ="";
   let authorData="";
 
-  if(!core.includes(lang)){
+  if(!core.includes(lang) && !fromJs.includes(lang)){
     console.log(chalk.red.bold(prefix.error + 'Unsupported language / framework / library , exiting!'));
     return;
   }
-  else{
-    if(prePath===undefined){
+
+  //if no directory path
+  if(prePath===undefined){
+    if(core.includes(lang)){
       finalName = `./${name}.${lang}`;
     }
-    else{
-      //obv wont create a new dir so handle this when final write , decide to create a dir here or somewhere else
-      if(lang==="package.json"){
-        finalName=`${prePath}/package.json`;
-      }
-      else{
-        finalName = `${prePath}/${name}.${lang}`;
-      }
+    else if(fromJs.includes(lang)){
+      finalName = `./${name}.js`;
     }
+  }
+
+  //if has a directory path
+  else if(prePath!==undefined){
+    if(lang==="package.json"){
+      finalName=`${prePath}/package.json`;
+    }
+    else{
+      finalName = `${prePath}/${name}.${lang}`;
+    }
+  }
+
+  else{
+    console.log(chalk.red.bold(prefix.error + 'Cant decide file name ,something went wrong!'));
+    return;
   }
 
   try{
@@ -158,8 +176,59 @@ const createNpmProject=async(name,packages)=>{
 
 }
 
+
+const compileAndRun=async(name)=>{
+  //add support for args
+  const [ fileName , lang ] = name.split('.');
+  let compileStep , child;
+
+  if(lang=='java'){
+    compileStep = await exec(`javac ${name}`);
+    child = spawn('java',[`${fileName}`],{shell: true});
+  }
+
+  else if(lang=='c'){
+    compileStep = await exec(`gcc ${name}`);
+    let isWin = process.platform === "win32";
+
+    if(isWin){
+      child = spawn('a',{shell: true});
+    }
+
+    else{
+      child = spawn('./a.out',{shell: true});//needs to be tested
+    }
+  }
+
+  else{
+    console.log(chalk.red.bold(prefix.error + 'Unsupported language for compile and run!'));
+    return;
+  }
+
+
+  child.stdout.on('data',(data)=>{
+    console.log(`${data}`);
+  });
+
+  child.stderr.on('data',(data)=>{
+    console.log(`${data}`);
+  });
+
+  child.on('error',(error)=>{
+    console.log(error.message);
+  });
+
+  child.on('exit',(code,signal)=>{
+    if(code) console.log(`Process exited with Code:${code}`);
+    if(signal) console.log(`Process killed with SIgnal:${signal}`);
+  });
+
+  process.stdin.pipe(child.stdin);
+
+}
+
 /* CLI arguments and functions go here */
-const prgVersion = 0.1;
+const prgVersion = 0.2;
 cmdr.version(prgVersion);
 
 cmdr
@@ -178,7 +247,16 @@ cmdr
   }
 });
 
+//compile and run
+cmdr
+.command('run')
+.argument('<name>','name of the file / class / object')
+.description('compiles and runs the file using its native toolchain')
+.action((name)=>{
+  compileAndRun(name).catch(err=>console.log(err.message));
+});
 
+//base npm project
 cmdr
 .command('npm')
 .argument('<name>' ,'name of the file / class / object')
@@ -189,6 +267,8 @@ cmdr
   console.log(chalk.white(figlet.textSync(`jumpstart v ${prgVersion}`,{font:'ANSI Shadow'})));
   createNpmProject(name,packages);
 });
+
+
 
 cmdr
 .command('credits')

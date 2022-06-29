@@ -1,3 +1,4 @@
+import { useState , useEffect } from 'react';
 ~author~
 const ~classname~ = (props) => {
   return(

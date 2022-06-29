@@ -1,0 +1,5 @@
+~author~
+
+fn main() {
+    println!("Hello World!");
+}
