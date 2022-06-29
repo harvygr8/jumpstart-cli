@@ -22,7 +22,7 @@
 - Navigate out of the jumpstart-cli directory
 
 # Usage
-- Supports the following templates: java,c,cpp,svelte,js,html,react,py,go,rs
+- Supports the following templates: <bold> java,c,cpp,svelte,js,html,react,py,go,rs </bold>
 - Generate file
 ```sh
 just java myprog
