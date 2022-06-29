@@ -155,7 +155,7 @@ const createNpmProject=async(name,packages)=>{
   await createFile('js',name,false,name);
   await createFile('package.json',name,false,name);
 
-  if(packages!==undefined){
+  if(Object.keys(packages).length !== 0){
     let packStr="";
     packages.package.forEach((item)=>{
       packStr += `${item} `;

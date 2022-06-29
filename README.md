@@ -22,12 +22,13 @@
 - Navigate out of the jumpstart-cli directory
 
 # Usage
+- Supports the following templates [java,c,cpp,svelte,js,html,react,py,go,rs]
 - Generate file
 ```sh
-just java palindrome
+just java myprog
 ```
 ```sh
-just js index
+just react TextBox
 ```
 
 - Generate npm project (Dependencies optional)
