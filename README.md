@@ -35,11 +35,13 @@ just js index
 just npm myapp -p chalk commander
 ```
 
--Compile and Run
+- Compile and Run
 ```sh
 just run myapp.c
 ```
-
+```sh
+just run myapp.java
+```
 
 # Contributions
 Currently the program supports npm project creation , but i will eventually add support for more frameworks/libraries. Meanwhile , i would love any contributions to the project, there is a lot that can be done here.
