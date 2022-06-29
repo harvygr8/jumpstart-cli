@@ -44,10 +44,11 @@ just run myapp.c
 just run myapp.java
 ```
 -Running the script on powershell and derived terminals commonly found in popular IDEs / Text Editor
+(Open a new powershell window and enter the command below)
 ```sh
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
-For more info as to why this step is necessay see this [link](https://stackoverflow.com/questions/4037939/powershell-says-execution-of-scripts-is-disabled-on-this-system)
+For more info as to why this step is necessary see this [link](https://stackoverflow.com/questions/4037939/powershell-says-execution-of-scripts-is-disabled-on-this-system)
 
 # Contributions
 Currently the program supports npm project creation , but i will eventually add support for more frameworks/libraries. Meanwhile , i would love any contributions to the project, there is a lot that can be done here.
