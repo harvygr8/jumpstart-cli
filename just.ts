@@ -270,7 +270,7 @@ const createProject = async (project: ProjectDetails) => {
         if (typeof err === "string") {
           console.log(chalk.red.bold(prefix.error + err.toUpperCase()));
         } else if (err instanceof Error) {
-          console.log(chalk.red.bold(prefix.error + err.message));
+          console.log(chalk.red.bold(prefix.error + "Could not execute 'create-react-app'!"));
         }
         return;
       }
