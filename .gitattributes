@@ -3,3 +3,5 @@
 *.js    eol=lf
 *.ts   eol=lf
 *.json  eol=lf
+
+*.js linguist-language=TypeScript
